@@ -1,10 +1,11 @@
 import { nanoid } from "nanoid";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const Signup = (props) => {
   const { toggler, settoggler,users , setusers } = props;
-  const{register, handleSubmit}=useForm()
+  const{register, handleSubmit,reset}=useForm()
 
   const submithandler=(data)=>{
     console.log(data)
@@ -12,16 +13,27 @@ const Signup = (props) => {
 
    const copyusers = [...users];
    copyusers.push(data);
-   setusers(copyusers)
+   setusers(copyusers);
+
+   const isPresent = users.find(
+         (user) => 
+           user.email === data.email && user.password === data.password
+       );
+   
+       if (isPresent) {
+         toast.success("User Already Exists!");
+       } else {
+         toast.error("User Not Found!");
+       }
+
+   reset()
   }
   return (
    
       <form
-       onSubmit={handleSubmit(submithandler)}
-        action=""
-        className="w-[35%] mt-10  bg-black/50   p-10 rounded-2xl flex flex-col gap-4 items-center"
+        onSubmit={handleSubmit(submithandler)}
+        className="w-[50%] mt-10  bg-[#727D73]   p-10 rounded-2xl flex flex-col gap-4 items-center"
       >
-        {/* {name , emial , password} */}
         <h1 className="text-3xl font-bold">let's begin the journey</h1>
         <input
          {...register("Username")}
